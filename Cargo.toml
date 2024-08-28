@@ -1,4 +1,13 @@
 [package]
 name = "pin-macros"
 version = "1.0.0-a.1"
+authors = ["retueZe"]
+description = "This library is primarly used to simplify the proccess of working with self-referencial structures."
+keywords = ["pin", "macros", "self-referencial", "future", "async"]
+categories = ["rust-patterns", "memory-management", "asynchronous"]
+license = "MIT"
+license-file = "LICENSE.txt"
+readme = "README.md"
+repository = "https://github.com/retueZe/pin-macros"
 edition = "2021"
+include = ["src"]

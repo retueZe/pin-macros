@@ -1,9 +1,13 @@
 root = true
 
-[/{.editorconfig,.gitignore,Cargo.toml,README.md,src/**.rs}]
+[/{.editorconfig,.gitignore,Cargo.toml,LICENSE.txt,README.md,src/**.rs}]
 charset = utf-8
 end_of_line = lf
 indent_size = 4
 indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
+
+[/LICENSE.txt]
+indent_style = unset
+insert_final_newline = false
