@@ -1,0 +1,6 @@
+[package]
+name = "pin_test"
+version = "1.0.0-a.1"
+edition = "2021"
+
+[dependencies]
