@@ -1,6 +1,6 @@
 [package]
 name = "pin-macros"
-version = "1.0.0-a.1"
+version = "1.0.0-a.2"
 authors = ["retueZe"]
 description = "This library is primarly used to simplify the proccess of working with self-referencial structures."
 keywords = ["pin", "macros", "self-referencial", "future", "async"]
