@@ -4,15 +4,15 @@ This library is primarly used to simplify the proccess of working with self-refe
 
 ## Required knowledge
 
-To read this document further, you are have:
+To read this document further, you should have:
 
 - To know following types:
     - `std::pin::Pin`;
     - `std::pin::Unpin`;
     - `std::mem::MaybeUninit`;
     - `std::marker::PhantomPinned`;
-- To know what's difference between movable and immovable types;
-- To know how to define an immovable type and how to mark a value (variable, parameter, etc) as immovable.
+- An understanding of the difference between movable and immovable types;
+- Knowledge of how to define an immovable type and how to mark a value (variable, parameter, etc.) as immovable.
 
 ## Getting Started
 
@@ -48,11 +48,11 @@ fn main() {
 
 ## Macros summary
 
-In this section, by `Self`, having a lifetime `'a`, will be meant an immovable type with are we working with.
+In this section, by `Self`, with a lifetime `'a`, we will mean the immovable type we are working with.
 
 ### `pin_new!`
 
-This macro allocates a immovable value on stack, using `MaybeUninit::<Self>::uninit()`, and then initializes it using the `Self::init` method, storing the initialized `Pin<&mut Self>` pointer in a variable. The variable may be mutable or immutable, depending on passed tokens.
+This macro allocates an immovable value on the stack, using `MaybeUninit::<Self>::uninit()`, and then initializes it using the `Self::init` method, storing the initialized `Pin<&mut Self>` pointer in a variable. The variable may be mutable or immutable, depending on the passed tokens.
 
 ```rust
 fn main() {
@@ -64,16 +64,16 @@ fn main() {
 
 ### `pin_init!`
 
-This macro defines an initialization method in an `impl`. It consumes following tokens:
+This macro defines an initialization method in an `impl`. It consumes the following tokens:
 
 1. An optional `pub`;
-2. A method's name;
+2. A method name;
 3. A lifetime (should be `'a`);
 4. A variable name for the `&'a mut Self` pointer;
 5. An optional list of argument definitions;
 6. A block in which you are free to write your initialization code.
 
-It basically a syntaxic sugar:
+It is basically syntactic sugar:
 
 ```rust
 pin_init!(pub fn init<'a>(this, arg1: u32, arg2: i32) {
@@ -95,7 +95,7 @@ pub fn init(__ptr: Pin<&'a mut MaybeUninit<Self>>, arg1: u32, arg2: i32) -> Pin<
 
 #### `pin_init_clone!`
 
-This macro returns a pointer to the already initialized value from the future (`Pin<&'a mut T>`). Since the value is immovable, we are able to know value's and all its fields' addresses before the initialization code ran. While results of `pin_init_clone!` calls are owned by `Self` fields, and the fields are not exposed our of `Self`'s private scope, it is safe to have multiple mutable references inside.
+This macro returns a pointer to the already initialized value from the future (`Pin<&'a mut T>`). Since the value is immovable, we can know the addresses of the value and all its fields before the initialization code runs. While the results of `pin_init_clone!` calls are owned by `Self` fields, and the fields are not exposed outside of `Self`'s private scope, it is safe to have multiple mutable references inside.
 
 ```rust
 pin_init!(... {
@@ -105,7 +105,7 @@ pin_init!(... {
 
 #### `pin_init_field!`
 
-This macro returns a `Pin<&'a mut MaybeUninit<F>>` pointer, where `F` — a field value type of `Self`. This is used when `Self` owns another immovable value, and we need to initialize it.
+This macro returns a `Pin<&'a mut MaybeUninit<F>>` pointer, where `F` is a field value type of `Self`. This is used when `Self` owns another immovable value, and we need to initialize it.
 
 ```rust
 struct Outer<'a> {
@@ -122,7 +122,7 @@ impl<'a> Outer<'a> {
 
 ### `pin_field_init!`
 
-This macro is used to initialize `Option<F>` during the `'a` lifetime but outside the `Self::init` call lifetime, where `F` — a field value type of `Self`. It has multiple 2 forms: for owned immovable values and for anything else.
+This macro is used to initialize `Option<F>` during the `'a` lifetime but outside the `Self::init` call lifetime, where `F` is a field value type of `Self`. It has two forms: one for owned immovable values and another for anything else.
 
 ```rust
 // initialization of owned immovable value
@@ -142,4 +142,4 @@ pub fn init_during_runtime(self: Pin<&'a mut Self>) {
 
 ### `field_pin!` & `field_unpin!`
 
-This macro are used as wrappers for `self.field` calls. Since our `self` is always wrapped in `Pin`, we cannot just get a field value. The `field_pin!` macro is used for creating private methods obtaining `Pin<&mut F>`, and `field_unpin!` — for `&mut F`, where `F` — a field value type of `Self`. Obviously, `field_pin!` should be used for immovable values, and `field_unpin!` — for movable.
+These macros are used as wrappers for `self.field` calls. Since our `self` is always wrapped in `Pin`, we cannot simply access a field value. The `field_pin!` macro is used to create private methods that obtain `Pin<&mut F>`, while `field_unpin!` is used for `&mut F`, where `F` is a field value type of `Self`. Clearly, `field_pin!` should be used for immovable values, and `field_unpin!` should be used for movable values.
